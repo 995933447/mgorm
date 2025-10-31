@@ -108,20 +108,20 @@ func Connect(connName string, cfg *ConnConfig, opts ...ApplyConnOptFunc) (*mongo
 		return nil, err
 	}
 
-	SetConn(connName, client)
+	SetClient(connName, client)
 
 	return client, nil
 }
 
-func SetConn(connName string, conn *mongo.Client) {
-	oldConnAny, ok := clientMap.Load(connName)
+func SetClient(connName string, client *mongo.Client) {
+	oldClientAny, ok := clientMap.Load(connName)
 	if ok {
 		go func() {
 			time.Sleep(time.Second * 5)
-			_ = oldConnAny.(*mongo.Client).Disconnect(context.Background())
+			_ = oldClientAny.(*mongo.Client).Disconnect(context.Background())
 		}()
 	}
-	clientMap.Store(connName, conn)
+	clientMap.Store(connName, client)
 }
 
 func ConnectDefault(cfg *ConnConfig, opts ...ApplyConnOptFunc) (*mongo.Client, error) {
