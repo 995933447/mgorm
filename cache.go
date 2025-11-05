@@ -158,19 +158,21 @@ func (r *RedisCache) Del(key string) error {
 }
 
 func (r *RedisCache) execCmd(ttl int64, cmd, key string, args ...interface{}) (interface{}, error) {
-	conn := r.redisPool.Get()
-
-	err := conn.Err()
-	if err != nil {
-		return 0, err
-	}
-
-	defer conn.Close()
+	var err error
 
 	if r.onCmdExec != nil {
 		start := time.Now()
 		defer r.onCmdExec(ttl, err, time.Since(start), cmd, key, args...)
 	}
+
+	conn := r.redisPool.Get()
+
+	err = conn.Err()
+	if err != nil {
+		return 0, err
+	}
+
+	defer conn.Close()
 
 	reply, err := conn.Do(cmd, append([]interface{}{key}, args...)...)
 	if err == nil {
