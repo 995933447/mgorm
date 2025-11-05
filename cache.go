@@ -103,14 +103,16 @@ type RedisPool interface {
 	Close() error
 }
 
-func NewRedisCache(redisPool RedisPool) *RedisCache {
+func NewRedisCache(redisPool RedisPool, onCmdExec func(ttl int64, err error, cost time.Duration, cmd string, key string, args ...interface{})) *RedisCache {
 	return &RedisCache{
 		redisPool: redisPool,
+		onCmdExec: onCmdExec,
 	}
 }
 
 type RedisCache struct {
 	redisPool RedisPool
+	onCmdExec func(ttl int64, err error, cost time.Duration, cmd string, key string, args ...interface{})
 }
 
 func (r *RedisCache) Get(key string, val any) (bool, error) {
@@ -158,11 +160,17 @@ func (r *RedisCache) Del(key string) error {
 func (r *RedisCache) execCmd(ttl int64, cmd, key string, args ...interface{}) (interface{}, error) {
 	conn := r.redisPool.Get()
 
-	if err := conn.Err(); err != nil {
+	err := conn.Err()
+	if err != nil {
 		return 0, err
 	}
 
 	defer conn.Close()
+
+	if r.onCmdExec != nil {
+		start := time.Now()
+		defer r.onCmdExec(ttl, err, time.Since(start), cmd, key, args...)
+	}
 
 	reply, err := conn.Do(cmd, append([]interface{}{key}, args...)...)
 	if err == nil {

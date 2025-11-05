@@ -52,7 +52,7 @@ func NewOrm(conn, db, tb string, cached bool, cache Cache, indexes, uniqIndexes,
 	return o
 }
 
-type OnQueryDoneFunc func(orm *Orm, method string, res any, err error, cost time.Duration, args ...any)
+type OnQueryDoneFunc func(orm *Orm, method string, res any, err error, cost time.Duration, args map[string]interface{})
 
 var OnQueryDone = OnQueryDoneFunc(nil)
 
@@ -104,9 +104,9 @@ func (o *Orm) SetOnQueryDone(fn OnQueryDoneFunc) {
 	o.onQueryDone = fn
 }
 
-func (o *Orm) OnQueryDone(orm *Orm, method string, res any, err error, cost time.Duration, args ...any) {
+func (o *Orm) OnQueryDone(orm *Orm, method string, res any, err error, cost time.Duration, args map[string]interface{}) {
 	if o.onQueryDone != nil {
-		o.onQueryDone(orm, method, res, err, cost, args...)
+		o.onQueryDone(orm, method, res, err, cost, args)
 	}
 }
 
@@ -115,7 +115,9 @@ func (o *Orm) InsertOneIgnoreConflict(ctx context.Context, data any) (res *mongo
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "InsertOneIgnoreConflict", res, err, time.Since(start), data)
+			o.OnQueryDone(o, "InsertOneIgnoreConflict", res, err, time.Since(start), map[string]interface{}{
+				"data": data,
+			})
 		}()
 	}
 
@@ -150,7 +152,9 @@ func (o *Orm) InsertOne(ctx context.Context, data any) (res *mongo.InsertOneResu
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "InsertOne", res, err, time.Since(start), data)
+			o.OnQueryDone(o, "InsertOne", res, err, time.Since(start), map[string]interface{}{
+				"data": data,
+			})
 		}()
 	}
 
@@ -173,7 +177,9 @@ func (o *Orm) InsertMany(ctx context.Context, data []any) (res *mongo.InsertMany
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "InsertMany", res, err, time.Since(start), data)
+			o.OnQueryDone(o, "InsertMany", res, err, time.Since(start), bson.M{
+				"data": data,
+			})
 		}()
 	}
 
@@ -196,7 +202,9 @@ func (o *Orm) InsertManyIgnoreConflict(ctx context.Context, data []any) (res *mo
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "InsertManyIgnoreConflict", res, err, time.Since(start), data)
+			o.OnQueryDone(o, "InsertManyIgnoreConflict", res, err, time.Since(start), map[string]interface{}{
+				"data": data,
+			})
 		}()
 	}
 
@@ -234,7 +242,9 @@ func (o *Orm) UpdateOne(ctx context.Context, filter, update any) (res *mongo.Upd
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "UpdateOne", res, err, time.Since(start), update)
+			o.OnQueryDone(o, "UpdateOne", res, err, time.Since(start), map[string]interface{}{
+				"update": update,
+			})
 		}()
 	}
 
@@ -257,7 +267,10 @@ func (o *Orm) UpdateMany(ctx context.Context, filter, update any) (res *mongo.Up
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "UpdateMany", res, err, time.Since(start), filter, update)
+			o.OnQueryDone(o, "UpdateMany", res, err, time.Since(start), map[string]interface{}{
+				"filter": filter,
+				"update": update,
+			})
 		}()
 	}
 
@@ -280,7 +293,10 @@ func (o *Orm) Upsert(ctx context.Context, filter, update any) (res *mongo.Update
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "Upsert", res, err, time.Since(start), filter, update)
+			o.OnQueryDone(o, "Upsert", res, err, time.Since(start), map[string]interface{}{
+				"filter": filter,
+				"update": update,
+			})
 		}()
 	}
 
@@ -305,7 +321,9 @@ func (o *Orm) DeleteOne(ctx context.Context, filter any) (res *mongo.DeleteResul
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "DeleteOne", res, err, time.Since(start), filter)
+			o.OnQueryDone(o, "DeleteOne", res, err, time.Since(start), bson.M{
+				"filter": filter,
+			})
 		}()
 	}
 
@@ -328,7 +346,9 @@ func (o *Orm) DeleteMany(ctx context.Context, filter any) (res *mongo.DeleteResu
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "DeleteMany", res, err, time.Since(start), filter)
+			o.OnQueryDone(o, "DeleteMany", res, err, time.Since(start), map[string]interface{}{
+				"filter": filter,
+			})
 		}()
 	}
 
@@ -351,7 +371,9 @@ func (o *Orm) FindOne(ctx context.Context, filter any, resp any) (err error) {
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "FindOne", resp, err, time.Since(start), filter)
+			o.OnQueryDone(o, "FindOne", resp, err, time.Since(start), map[string]interface{}{
+				"filter": filter,
+			})
 		}()
 	}
 
@@ -370,7 +392,11 @@ func (o *Orm) FindOneByCacheKey(ctx context.Context, filter bson.M, cacheKey str
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "FindOneByCacheKey", resp, err, time.Since(start), filter, cacheKey, resp)
+			o.OnQueryDone(o, "FindOneByCacheKey", resp, err, time.Since(start), map[string]interface{}{
+				"filter":   filter,
+				"cacheKey": cacheKey,
+				"resp":     resp,
+			})
 		}()
 	}
 
@@ -406,7 +432,10 @@ func (o *Orm) FindOneByID(ctx context.Context, id string, resp any) (err error) 
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "FindOneByID", resp, err, time.Since(start), id, resp)
+			o.OnQueryDone(o, "FindOneByID", resp, err, time.Since(start), map[string]interface{}{
+				"id":   id,
+				"resp": resp,
+			})
 		}()
 	}
 
@@ -428,7 +457,10 @@ func (o *Orm) FindAll(ctx context.Context, filter any, selector ...any) (curs *m
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "FindAll", curs, err, time.Since(start), filter, selector)
+			o.OnQueryDone(o, "FindAll", curs, err, time.Since(start), bson.M{
+				"filter":   filter,
+				"selector": selector,
+			})
 		}()
 	}
 
@@ -455,7 +487,11 @@ func (o *Orm) FindAllBySort(ctx context.Context, filter any, sort bson.D, select
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "FindAllBySort", curs, err, time.Since(start), filter, sort, selector)
+			o.OnQueryDone(o, "FindAllBySort", curs, err, time.Since(start), map[string]interface{}{
+				"filter":   filter,
+				"sort":     sort,
+				"selector": selector,
+			})
 		}()
 	}
 
@@ -487,7 +523,12 @@ func (o *Orm) FindMany(ctx context.Context, filter any, sort bson.D, limit int64
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "FindMany", curs, err, time.Since(start), filter, sort, limit, selector)
+			o.OnQueryDone(o, "FindMany", curs, err, time.Since(start), map[string]interface{}{
+				"filter":   filter,
+				"sort":     sort,
+				"limit":    limit,
+				"selector": selector,
+			})
 		}()
 	}
 
@@ -518,7 +559,13 @@ func (o *Orm) FindManyByPage(ctx context.Context, filter any, sort bson.D, offse
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "FindManyByPage", curs, err, time.Since(start), filter, sort, offset, limit, selector)
+			o.OnQueryDone(o, "FindManyByPage", curs, err, time.Since(start), map[string]interface{}{
+				"filter":   filter,
+				"sort":     sort,
+				"offset":   offset,
+				"limit":    limit,
+				"selector": selector,
+			})
 		}()
 	}
 
@@ -550,7 +597,9 @@ func (o *Orm) FindCount(ctx context.Context, filter any) (count int64, err error
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "FindCount", count, err, time.Since(start), filter)
+			o.OnQueryDone(o, "FindCount", count, err, time.Since(start), bson.M{
+				"filter": filter,
+			})
 		}()
 	}
 
@@ -569,7 +618,10 @@ func (o *Orm) Aggregate(ctx context.Context, pipe []bson.D, opts ...*options.Agg
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "Aggregate", res, err, time.Since(start), pipe, opts)
+			o.OnQueryDone(o, "Aggregate", res, err, time.Since(start), map[string]interface{}{
+				"pipe": pipe,
+				"opts": opts,
+			})
 		}()
 	}
 
@@ -622,7 +674,7 @@ func (o *Orm) Txn(ctx context.Context, fn func(mongo.SessionContext) error) (err
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "Txn", nil, err, time.Since(start))
+			o.OnQueryDone(o, "Txn", nil, err, time.Since(start), map[string]interface{}{})
 		}()
 	}
 
@@ -672,7 +724,9 @@ func (o *Orm) ClearIndexes(ctx context.Context, retainKeys []string) (err error)
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "ClearIndexes", nil, err, time.Since(start), retainKeys)
+			o.OnQueryDone(o, "ClearIndexes", nil, err, time.Since(start), map[string]interface{}{
+				"retainKeys": retainKeys,
+			})
 		}()
 	}
 
@@ -735,7 +789,7 @@ func (o *Orm) CreatIndexes(ctx context.Context) (err error) {
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "CreatIndexes", nil, err, time.Since(start))
+			o.OnQueryDone(o, "CreatIndexes", nil, err, time.Since(start), map[string]interface{}{})
 		}()
 	}
 
@@ -901,7 +955,9 @@ func (o *Orm) DeleteIndex(ctx context.Context, indexName string) (err error) {
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "DeleteIndex", nil, err, time.Since(start), indexName)
+			o.OnQueryDone(o, "DeleteIndex", nil, err, time.Since(start), map[string]interface{}{
+				"indexName": indexName,
+			})
 		}()
 	}
 
@@ -918,7 +974,11 @@ func (o *Orm) CreatIndexByKeys(ctx context.Context, indexKeys, uniqIndexKeys, ex
 		start := time.Now()
 
 		defer func() {
-			o.OnQueryDone(o, "CreatIndexByKeys", nil, err, time.Since(start), indexKeys, uniqIndexKeys, expireIndexKeys)
+			o.OnQueryDone(o, "CreatIndexByKeys", nil, err, time.Since(start), map[string]interface{}{
+				"indexKeys":       indexKeys,
+				"uniqIndexKeys":   uniqIndexKeys,
+				"expireIndexKeys": expireIndexKeys,
+			})
 		}()
 	}
 
