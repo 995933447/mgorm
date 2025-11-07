@@ -26,8 +26,8 @@ type FieldType int32
 
 const (
 	FieldType_FieldTypeNil      FieldType = 0
-	FieldType_FieldTypeDatetime FieldType = 1
-	FieldType_FieldTypeObjectId FieldType = 2
+	FieldType_FieldTypeDatetime FieldType = 1 // 时间类型
+	FieldType_FieldTypeObjectId FieldType = 2 // object id类型
 )
 
 // Enum value maps for FieldType.
@@ -73,21 +73,21 @@ func (FieldType) EnumDescriptor() ([]byte, []int) {
 
 type MgormOptions struct {
 	state                 protoimpl.MessageState `protogen:"open.v1"`
-	Conn                  string                 `protobuf:"bytes,1,opt,name=conn,proto3" json:"conn,omitempty"`
-	Db                    string                 `protobuf:"bytes,2,opt,name=db,proto3" json:"db,omitempty"`
-	Tb                    string                 `protobuf:"bytes,3,opt,name=tb,proto3" json:"tb,omitempty"`
-	Cached                bool                   `protobuf:"varint,4,opt,name=cached,proto3" json:"cached,omitempty"`
-	IndexKeys             []string               `protobuf:"bytes,5,rep,name=index_keys,json=indexKeys,proto3" json:"index_keys,omitempty"`
-	ExpireIndexKeys       []string               `protobuf:"bytes,6,rep,name=expire_index_keys,json=expireIndexKeys,proto3" json:"expire_index_keys,omitempty"`
-	UniqIndexKeys         []string               `protobuf:"bytes,7,rep,name=uniq_index_keys,json=uniqIndexKeys,proto3" json:"uniq_index_keys,omitempty"`
-	DisabledAutoCreatedAt bool                   `protobuf:"varint,8,opt,name=disabled_auto_created_at,json=disabledAutoCreatedAt,proto3" json:"disabled_auto_created_at,omitempty"`
-	DisabledAutoUpdatedAt bool                   `protobuf:"varint,9,opt,name=disabled_auto_updated_at,json=disabledAutoUpdatedAt,proto3" json:"disabled_auto_updated_at,omitempty"`
-	DisabledAutoExpireAt  bool                   `protobuf:"varint,10,opt,name=disabled_auto_expire_at,json=disabledAutoExpireAt,proto3" json:"disabled_auto_expire_at,omitempty"`
-	PrimaryIdFieldName    string                 `protobuf:"bytes,12,opt,name=primary_id_field_name,json=primaryIdFieldName,proto3" json:"primary_id_field_name,omitempty"`
-	ExpireTtlDays         int64                  `protobuf:"varint,13,opt,name=expire_ttl_days,json=expireTtlDays,proto3" json:"expire_ttl_days,omitempty"`
-	OrmStructNameSuffix   string                 `protobuf:"bytes,14,opt,name=orm_struct_name_suffix,json=ormStructNameSuffix,proto3" json:"orm_struct_name_suffix,omitempty"`
-	OrmModelNameSuffix    string                 `protobuf:"bytes,15,opt,name=orm_model_name_suffix,json=ormModelNameSuffix,proto3" json:"orm_model_name_suffix,omitempty"`
-	IsPureStruct          bool                   `protobuf:"varint,16,opt,name=is_pure_struct,json=isPureStruct,proto3" json:"is_pure_struct,omitempty"`
+	Conn                  string                 `protobuf:"bytes,1,opt,name=conn,proto3" json:"conn,omitempty"`                                                                     // 连接名称,支持自动水平扩展切分,如default_conn_%s_%d、scrm_%d
+	Db                    string                 `protobuf:"bytes,2,opt,name=db,proto3" json:"db,omitempty"`                                                                         // 数据库名称,支持自动水平扩展切分,如biz_%s_%d、biz2_%d
+	Tb                    string                 `protobuf:"bytes,3,opt,name=tb,proto3" json:"tb,omitempty"`                                                                         // 集合名称,支持自动水平扩展切分,如user_%s_%d、wallet_%d
+	Cached                bool                   `protobuf:"varint,4,opt,name=cached,proto3" json:"cached,omitempty"`                                                                // 是否启用缓存
+	IndexKeys             []string               `protobuf:"bytes,5,rep,name=index_keys,json=indexKeys,proto3" json:"index_keys,omitempty"`                                          // 普通索引
+	ExpireIndexKeys       []string               `protobuf:"bytes,6,rep,name=expire_index_keys,json=expireIndexKeys,proto3" json:"expire_index_keys,omitempty"`                      // 过期索引
+	UniqIndexKeys         []string               `protobuf:"bytes,7,rep,name=uniq_index_keys,json=uniqIndexKeys,proto3" json:"uniq_index_keys,omitempty"`                            // 唯一索引
+	DisabledAutoCreatedAt bool                   `protobuf:"varint,8,opt,name=disabled_auto_created_at,json=disabledAutoCreatedAt,proto3" json:"disabled_auto_created_at,omitempty"` // 是否禁用自动创建created_at字段
+	DisabledAutoUpdatedAt bool                   `protobuf:"varint,9,opt,name=disabled_auto_updated_at,json=disabledAutoUpdatedAt,proto3" json:"disabled_auto_updated_at,omitempty"` // 是否禁用自动创建updated_at字段
+	DisabledAutoExpireAt  bool                   `protobuf:"varint,10,opt,name=disabled_auto_expire_at,json=disabledAutoExpireAt,proto3" json:"disabled_auto_expire_at,omitempty"`   // 是否禁用自动创建expire_at字段,启用后没有指定过期索引的情况下将把expire_at作为默认的过期索引
+	PrimaryIdFieldName    string                 `protobuf:"bytes,12,opt,name=primary_id_field_name,json=primaryIdFieldName,proto3" json:"primary_id_field_name,omitempty"`          // 指定主键_id字段名称,不设置则默认采用ID
+	ExpireTtlDays         int64                  `protobuf:"varint,13,opt,name=expire_ttl_days,json=expireTtlDays,proto3" json:"expire_ttl_days,omitempty"`                          // 过期索引过期时间，仅作用于expire_at字段
+	OrmStructNameSuffix   string                 `protobuf:"bytes,14,opt,name=orm_struct_name_suffix,json=ormStructNameSuffix,proto3" json:"orm_struct_name_suffix,omitempty"`       // 指定生成的结构体名称尾缀，不设置则默认采用Orm
+	OrmModelNameSuffix    string                 `protobuf:"bytes,15,opt,name=orm_model_name_suffix,json=ormModelNameSuffix,proto3" json:"orm_model_name_suffix,omitempty"`          // 指定生成的Model名称尾缀,不设置则默认Model
+	IsPureStruct          bool                   `protobuf:"varint,16,opt,name=is_pure_struct,json=isPureStruct,proto3" json:"is_pure_struct,omitempty"`                             // 是否只生成结构体,不生成Model,常用与集合里面内嵌的集合结构体
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -229,9 +229,10 @@ func (x *MgormOptions) GetIsPureStruct() bool {
 
 type MgormFieldOptions struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	BsonTag       string                 `protobuf:"bytes,1,opt,name=bson_tag,json=bsonTag,proto3" json:"bson_tag,omitempty"`
-	JsonTag       string                 `protobuf:"bytes,2,opt,name=json_tag,json=jsonTag,proto3" json:"json_tag,omitempty"`
-	FieldType     FieldType              `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=ext.FieldType" json:"field_type,omitempty"`
+	BsonTag       string                 `protobuf:"bytes,1,opt,name=bson_tag,json=bsonTag,proto3" json:"bson_tag,omitempty"`                           // 自定义字段的tag bson
+	JsonTag       string                 `protobuf:"bytes,2,opt,name=json_tag,json=jsonTag,proto3" json:"json_tag,omitempty"`                           // 自定义字段的tag json
+	FieldType     FieldType              `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=ext.FieldType" json:"field_type,omitempty"` // 自定义字段的特殊类型
+	Tags          string                 `protobuf:"bytes,4,opt,name=tags,proto3" json:"tags,omitempty"`                                                // 自定义tags,如果自定义tags,则会直接采用tags作为最终tags,即时定义了bson_tag或json_tag,也会被tags覆盖
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -287,6 +288,13 @@ func (x *MgormFieldOptions) GetFieldType() FieldType {
 	return FieldType_FieldTypeNil
 }
 
+func (x *MgormFieldOptions) GetTags() string {
+	if x != nil {
+		return x.Tags
+	}
+	return ""
+}
+
 var file_ext_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
 		ExtendedType:  (*descriptorpb.MessageOptions)(nil),
@@ -340,12 +348,13 @@ const file_ext_proto_rawDesc = "" +
 	"\x0fexpire_ttl_days\x18\r \x01(\x03R\rexpireTtlDays\x123\n" +
 	"\x16orm_struct_name_suffix\x18\x0e \x01(\tR\x13ormStructNameSuffix\x121\n" +
 	"\x15orm_model_name_suffix\x18\x0f \x01(\tR\x12ormModelNameSuffix\x12$\n" +
-	"\x0eis_pure_struct\x18\x10 \x01(\bR\fisPureStruct\"x\n" +
+	"\x0eis_pure_struct\x18\x10 \x01(\bR\fisPureStruct\"\x8c\x01\n" +
 	"\x11MgormFieldOptions\x12\x19\n" +
 	"\bbson_tag\x18\x01 \x01(\tR\absonTag\x12\x19\n" +
 	"\bjson_tag\x18\x02 \x01(\tR\ajsonTag\x12-\n" +
 	"\n" +
-	"field_type\x18\x03 \x01(\x0e2\x0e.ext.FieldTypeR\tfieldType*K\n" +
+	"field_type\x18\x03 \x01(\x0e2\x0e.ext.FieldTypeR\tfieldType\x12\x12\n" +
+	"\x04tags\x18\x04 \x01(\tR\x04tags*K\n" +
 	"\tFieldType\x12\x10\n" +
 	"\fFieldTypeNil\x10\x00\x12\x15\n" +
 	"\x11FieldTypeDatetime\x10\x01\x12\x15\n" +
