@@ -50,7 +50,7 @@ var userExpireIndexKeys = []string{
 
 type UserOrm struct {
 	ID               primitive.ObjectID          `json:"_id,omitempty" bson:"_id,omitempty"`
-	Id               uint64                      `json:"id" bson:"id"`
+	Id               uint64                      `schema:"title=唯一标识"`
 	Username         string                      `json:"username,omitempty" bson:"username,omitempty"`
 	Email            string                      `json:"email,omitempty" bson:"email,omitempty"`
 	Age              int32                       `json:"age,omitempty" bson:"age,omitempty"`
