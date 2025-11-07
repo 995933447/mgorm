@@ -157,7 +157,6 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) InsertMany(ctx context.Con
 	return err
 }
 
-{{ if .Cached }}
 func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) GetCacheKeys(data *{{ .MessageName }}{{ .OrmStructNameSuffix }}) []string {
 	var cacheKeys []string
 	cacheKeys = append(cacheKeys, fmt.Sprintf("_id:%s", data.{{ .PrimaryIdFieldName }}.Hex()))
@@ -169,7 +168,6 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) GetCacheKeys(data *{{ .Mes
 	{{- end }}
 	return cacheKeys
 }
-{{- end }}
 
 func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) Update(ctx context.Context, data *{{ .MessageName }}{{ .OrmStructNameSuffix }}) (*mongo.UpdateResult, error) {
 	dataB, err := mgorm.ToBsonM(data)
