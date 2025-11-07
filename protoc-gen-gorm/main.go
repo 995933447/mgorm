@@ -106,6 +106,7 @@ type Field struct {
 	TypeName string
 	JsonTag  string
 	BsonTag  string
+	Tags     string
 }
 
 type IndexInfo struct {
@@ -545,10 +546,9 @@ func parseMsgFields(f *protogen.File, headerSlot *TemplateHeaderSlot, bodySlot *
 	var fields []*Field
 
 	for _, field := range msg.Fields {
-		var typeName string
 		bsonTag := stringhelper.Snake(field.GoName) + ",omitempty"
 		jsonTag := stringhelper.Snake(field.GoName) + ",omitempty"
-
+		var tags string
 		// 支持 mgorm 字段扩展选项
 		if proto.HasExtension(field.Desc.Options(), pb.E_MgormFieldOpts) {
 			fieldExt := proto.GetExtension(field.Desc.Options(), pb.E_MgormFieldOpts).(*pb.MgormFieldOptions)
@@ -558,8 +558,10 @@ func parseMsgFields(f *protogen.File, headerSlot *TemplateHeaderSlot, bodySlot *
 			if fieldExt.JsonTag != "" {
 				jsonTag = fieldExt.JsonTag
 			}
+			tags = fieldExt.Tags
 		}
 
+		var typeName string
 		// 判断类型（list / map / 基础类型）
 		switch {
 		case field.Desc.IsList():
@@ -580,6 +582,7 @@ func parseMsgFields(f *protogen.File, headerSlot *TemplateHeaderSlot, bodySlot *
 			TypeName: typeName,
 			BsonTag:  bsonTag,
 			JsonTag:  jsonTag,
+			Tags:     tags,
 		})
 	}
 
