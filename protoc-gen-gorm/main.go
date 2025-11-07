@@ -47,6 +47,8 @@ type TemplateHeaderSlot struct {
 	ImportPathBase        string
 	ExistsModel           bool
 	DisabledAutoExpireAt  bool
+	DisabledAutoUpdatedAt bool
+	DisabledAutoCreatedAt bool
 	ExtraImportPaths      []string
 	Cached                bool
 	ShouldImportPrimitive bool
@@ -298,6 +300,8 @@ func genCode(plugin *protogen.Plugin, f *protogen.File, messageMap map[string]*p
 	var headerSlot TemplateHeaderSlot
 	headerSlot.ImportPathBase = path.Base(string(f.GoImportPath))
 	headerSlot.DisabledAutoExpireAt = true
+	headerSlot.DisabledAutoUpdatedAt = true
+	headerSlot.DisabledAutoCreatedAt = true
 
 	var bodySections []bytes.Buffer
 
@@ -328,8 +332,16 @@ func genCode(plugin *protogen.Plugin, f *protogen.File, messageMap map[string]*p
 		bodySlot.DisabledAutoCreatedAt = ext.DisabledAutoCreatedAt
 		bodySlot.DisabledAutoUpdatedAt = ext.DisabledAutoUpdatedAt
 		bodySlot.DisabledAutoExpireAt = ext.DisabledAutoExpireAt
-		if bodySlot.ShouldGenModel && !bodySlot.DisabledAutoExpireAt {
-			headerSlot.DisabledAutoExpireAt = false
+		if bodySlot.ShouldGenModel {
+			if !bodySlot.DisabledAutoExpireAt {
+				headerSlot.DisabledAutoExpireAt = false
+			}
+			if !bodySlot.DisabledAutoUpdatedAt {
+				headerSlot.DisabledAutoUpdatedAt = false
+			}
+			if !bodySlot.DisabledAutoCreatedAt {
+				headerSlot.DisabledAutoCreatedAt = false
+			}
 		}
 		bodySlot.Cached = ext.Cached
 		if bodySlot.ShouldGenModel && bodySlot.Cached {
