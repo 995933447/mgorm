@@ -34,7 +34,7 @@ type {{ .MessageName }}{{ .OrmStructNameSuffix }} struct {
 	{{- end }}
 
 	{{- range .Fields }}
-	{{ .Name }} {{ .TypeName }} `json:"{{ .JsonTag }}" bson:"{{ .BsonTag }}"`
+	{{ .Name }} {{ .TypeName }} {{if .Tags}}`{{ .Tags }}`{{else}}`json:"{{ .JsonTag }}" bson:"{{ .BsonTag }}"`{{end}}
 	{{- end }}
 
 	{{- if .ShouldGenModel }}
