@@ -333,6 +333,9 @@ func genCode(plugin *protogen.Plugin, f *protogen.File, messageMap map[string]*p
 		bodySlot.DisabledAutoUpdatedAt = ext.DisabledAutoUpdatedAt
 		bodySlot.DisabledAutoExpireAt = ext.DisabledAutoExpireAt
 		if bodySlot.ShouldGenModel {
+			if ext.ExpireTtlDays == 0 {
+				bodySlot.DisabledAutoExpireAt = true
+			}
 			if !bodySlot.DisabledAutoExpireAt {
 				headerSlot.DisabledAutoExpireAt = false
 			}
