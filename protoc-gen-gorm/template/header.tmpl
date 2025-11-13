@@ -4,7 +4,6 @@ package {{.ImportPathBase}}
 import (
     {{- if .ExistsModel }}
     "context"
-    "errors"
     "fmt"
 
     {{- if or (not .DisabledAutoExpireAt) (not .DisabledAutoUpdatedAt) (not .DisabledAutoCreatedAt) (.ShouldImportTime) }}

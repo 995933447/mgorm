@@ -179,7 +179,7 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) Update(ctx context.Context
 	old, err := m.Model.FindOneBy{{ .PrimaryIdFieldName }}(ctx, data.{{ .PrimaryIdFieldName }}.Hex())
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(old))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	{{- end }}
@@ -195,7 +195,7 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) UpdateOne(ctx context.Cont
 	old, err := m.Model.FindOne(ctx, filter)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(old))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	{{- end }}
@@ -240,7 +240,7 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) Upsert(ctx context.Context
 	old, err := m.Model.FindOne(ctx, filter)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(old))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	{{- end }}
@@ -258,7 +258,7 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) UpInc(ctx context.Context,
 	old, err := m.Model.FindOne(ctx, filter)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(old))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	{{- end }}
@@ -279,7 +279,7 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) UpAndInc(ctx context.Conte
 	old, err := m.Model.FindOne(ctx, filter)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(old))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	{{- end }}
@@ -292,7 +292,7 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) DeleteOne(ctx context.Cont
 	old, err := m.Model.FindOne(ctx, filter)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(old))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	{{- end }}
@@ -326,7 +326,7 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) UpdateOneBy{{ .PrimaryIdFi
 	old, err := m.Model.FindOneBy{{ .PrimaryIdFieldName }}(ctx, id)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(old))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	{{- end }}
@@ -347,7 +347,7 @@ func (m *{{ .MessageName }}{{ .OrmModelNameSuffix }}) DeleteOneBy{{ .PrimaryIdFi
 	old, err := m.Model.FindOneBy{{ .PrimaryIdFieldName }}(ctx, id)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(old))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	{{- end }}
@@ -389,7 +389,7 @@ func (m *{{$modName}}{{$ormModelNameSuffix}}) UpdateOneBy{{.NamedByJoinAnd}}(ctx
 	err := m.Model.FindOneByCacheKey(ctx, filter, cacheKey, &data)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(&data))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 
@@ -427,7 +427,7 @@ func (m *{{$modName}}{{$ormModelNameSuffix}}) DeleteOneBy{{.NamedByJoinAnd}}(ctx
 	err := m.Model.FindOneByCacheKey(ctx, filter, cacheKey, &data)
 	if err == nil {
 		defer m.Model.DelCache(m.GetCacheKeys(&data))
-	} else if !errors.Is(err, mongo.ErrNoDocuments) {
+	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
 	return m.Model.DeleteOne(ctx, filter)
