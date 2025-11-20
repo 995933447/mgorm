@@ -560,9 +560,22 @@ func registerMessages(messageMap map[string]*protogen.Message, msg *protogen.Mes
 func parseMsgFields(f *protogen.File, headerSlot *TemplateHeaderSlot, bodySlot *TemplateBodySlot, msg *protogen.Message, messageMap map[string]*protogen.Message) []*Field {
 	var fields []*Field
 
+	var omitemptyBsonTag, omitemptyJonTag bool
+	if proto.HasExtension(msg.Desc.Options(), pb.E_MgormOpts) {
+		msgExt := proto.GetExtension(msg.Desc.Options(), pb.E_MgormOpts).(*pb.MgormOptions)
+		omitemptyBsonTag = msgExt.OmitemptyDefaultBsonTag
+		omitemptyJonTag = msgExt.OmitemptyDefaultJsonTag
+	}
+
 	for _, field := range msg.Fields {
-		bsonTag := stringhelper.Snake(field.GoName) + ",omitempty"
-		jsonTag := stringhelper.Snake(field.GoName) + ",omitempty"
+		bsonTag := stringhelper.Snake(field.GoName)
+		if omitemptyBsonTag {
+			bsonTag += ",omitempty"
+		}
+		jsonTag := stringhelper.Snake(field.GoName)
+		if omitemptyJonTag {
+			jsonTag += ",omitempty"
+		}
 		var tags string
 		// 支持 mgorm 字段扩展选项
 		if proto.HasExtension(field.Desc.Options(), pb.E_MgormFieldOpts) {
