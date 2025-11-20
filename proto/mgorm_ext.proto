@@ -29,6 +29,8 @@ message MgormOptions {
   string orm_struct_name_suffix = 14; // 指定生成的结构体名称尾缀，不设置则默认采用Orm
   string orm_model_name_suffix = 15; // 指定生成的Model名称尾缀,不设置则默认Model
   bool is_pure_struct = 16; // 是否只生成结构体,不生成Model,常用与集合里面内嵌的集合结构体
+  bool omitempty_default_bson_tag = 17; // 生成bson tag时候是否默认omitempty
+  bool omitempty_default_json_tag = 18; // 生成json tag时候是否默认omitempty
 }
 
 message MgormFieldOptions {
