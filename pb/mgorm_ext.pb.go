@@ -72,24 +72,26 @@ func (FieldType) EnumDescriptor() ([]byte, []int) {
 }
 
 type MgormOptions struct {
-	state                 protoimpl.MessageState `protogen:"open.v1"`
-	Conn                  string                 `protobuf:"bytes,1,opt,name=conn,proto3" json:"conn,omitempty"`                                                                     // 连接名称,支持自动水平扩展切分,如default_conn_%s_%d、scrm_%d
-	Db                    string                 `protobuf:"bytes,2,opt,name=db,proto3" json:"db,omitempty"`                                                                         // 数据库名称,支持自动水平扩展切分,如biz_%s_%d、biz2_%d
-	Tb                    string                 `protobuf:"bytes,3,opt,name=tb,proto3" json:"tb,omitempty"`                                                                         // 集合名称,支持自动水平扩展切分,如user_%s_%d、wallet_%d
-	Cached                bool                   `protobuf:"varint,4,opt,name=cached,proto3" json:"cached,omitempty"`                                                                // 是否启用缓存
-	IndexKeys             []string               `protobuf:"bytes,5,rep,name=index_keys,json=indexKeys,proto3" json:"index_keys,omitempty"`                                          // 普通索引
-	ExpireIndexKeys       []string               `protobuf:"bytes,6,rep,name=expire_index_keys,json=expireIndexKeys,proto3" json:"expire_index_keys,omitempty"`                      // 过期索引
-	UniqIndexKeys         []string               `protobuf:"bytes,7,rep,name=uniq_index_keys,json=uniqIndexKeys,proto3" json:"uniq_index_keys,omitempty"`                            // 唯一索引
-	DisabledAutoCreatedAt bool                   `protobuf:"varint,8,opt,name=disabled_auto_created_at,json=disabledAutoCreatedAt,proto3" json:"disabled_auto_created_at,omitempty"` // 是否禁用自动创建created_at字段
-	DisabledAutoUpdatedAt bool                   `protobuf:"varint,9,opt,name=disabled_auto_updated_at,json=disabledAutoUpdatedAt,proto3" json:"disabled_auto_updated_at,omitempty"` // 是否禁用自动创建updated_at字段
-	DisabledAutoExpireAt  bool                   `protobuf:"varint,10,opt,name=disabled_auto_expire_at,json=disabledAutoExpireAt,proto3" json:"disabled_auto_expire_at,omitempty"`   // 是否禁用自动创建expire_at字段,启用后没有指定过期索引的情况下将把expire_at作为默认的过期索引
-	PrimaryIdFieldName    string                 `protobuf:"bytes,12,opt,name=primary_id_field_name,json=primaryIdFieldName,proto3" json:"primary_id_field_name,omitempty"`          // 指定主键_id字段名称,不设置则默认采用ID
-	ExpireTtlDays         int64                  `protobuf:"varint,13,opt,name=expire_ttl_days,json=expireTtlDays,proto3" json:"expire_ttl_days,omitempty"`                          // 过期索引过期时间，仅作用于expire_at字段
-	OrmStructNameSuffix   string                 `protobuf:"bytes,14,opt,name=orm_struct_name_suffix,json=ormStructNameSuffix,proto3" json:"orm_struct_name_suffix,omitempty"`       // 指定生成的结构体名称尾缀，不设置则默认采用Orm
-	OrmModelNameSuffix    string                 `protobuf:"bytes,15,opt,name=orm_model_name_suffix,json=ormModelNameSuffix,proto3" json:"orm_model_name_suffix,omitempty"`          // 指定生成的Model名称尾缀,不设置则默认Model
-	IsPureStruct          bool                   `protobuf:"varint,16,opt,name=is_pure_struct,json=isPureStruct,proto3" json:"is_pure_struct,omitempty"`                             // 是否只生成结构体,不生成Model,常用与集合里面内嵌的集合结构体
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	state                   protoimpl.MessageState `protogen:"open.v1"`
+	Conn                    string                 `protobuf:"bytes,1,opt,name=conn,proto3" json:"conn,omitempty"`                                                                            // 连接名称,支持自动水平扩展切分,如default_conn_%s_%d、scrm_%d
+	Db                      string                 `protobuf:"bytes,2,opt,name=db,proto3" json:"db,omitempty"`                                                                                // 数据库名称,支持自动水平扩展切分,如biz_%s_%d、biz2_%d
+	Tb                      string                 `protobuf:"bytes,3,opt,name=tb,proto3" json:"tb,omitempty"`                                                                                // 集合名称,支持自动水平扩展切分,如user_%s_%d、wallet_%d
+	Cached                  bool                   `protobuf:"varint,4,opt,name=cached,proto3" json:"cached,omitempty"`                                                                       // 是否启用缓存
+	IndexKeys               []string               `protobuf:"bytes,5,rep,name=index_keys,json=indexKeys,proto3" json:"index_keys,omitempty"`                                                 // 普通索引
+	ExpireIndexKeys         []string               `protobuf:"bytes,6,rep,name=expire_index_keys,json=expireIndexKeys,proto3" json:"expire_index_keys,omitempty"`                             // 过期索引
+	UniqIndexKeys           []string               `protobuf:"bytes,7,rep,name=uniq_index_keys,json=uniqIndexKeys,proto3" json:"uniq_index_keys,omitempty"`                                   // 唯一索引
+	DisabledAutoCreatedAt   bool                   `protobuf:"varint,8,opt,name=disabled_auto_created_at,json=disabledAutoCreatedAt,proto3" json:"disabled_auto_created_at,omitempty"`        // 是否禁用自动创建created_at字段
+	DisabledAutoUpdatedAt   bool                   `protobuf:"varint,9,opt,name=disabled_auto_updated_at,json=disabledAutoUpdatedAt,proto3" json:"disabled_auto_updated_at,omitempty"`        // 是否禁用自动创建updated_at字段
+	DisabledAutoExpireAt    bool                   `protobuf:"varint,10,opt,name=disabled_auto_expire_at,json=disabledAutoExpireAt,proto3" json:"disabled_auto_expire_at,omitempty"`          // 是否禁用自动创建expire_at字段,启用后没有指定过期索引的情况下将把expire_at作为默认的过期索引
+	PrimaryIdFieldName      string                 `protobuf:"bytes,12,opt,name=primary_id_field_name,json=primaryIdFieldName,proto3" json:"primary_id_field_name,omitempty"`                 // 指定主键_id字段名称,不设置则默认采用ID
+	ExpireTtlDays           int64                  `protobuf:"varint,13,opt,name=expire_ttl_days,json=expireTtlDays,proto3" json:"expire_ttl_days,omitempty"`                                 // 过期索引过期时间，仅作用于expire_at字段
+	OrmStructNameSuffix     string                 `protobuf:"bytes,14,opt,name=orm_struct_name_suffix,json=ormStructNameSuffix,proto3" json:"orm_struct_name_suffix,omitempty"`              // 指定生成的结构体名称尾缀，不设置则默认采用Orm
+	OrmModelNameSuffix      string                 `protobuf:"bytes,15,opt,name=orm_model_name_suffix,json=ormModelNameSuffix,proto3" json:"orm_model_name_suffix,omitempty"`                 // 指定生成的Model名称尾缀,不设置则默认Model
+	IsPureStruct            bool                   `protobuf:"varint,16,opt,name=is_pure_struct,json=isPureStruct,proto3" json:"is_pure_struct,omitempty"`                                    // 是否只生成结构体,不生成Model,常用与集合里面内嵌的集合结构体
+	OmitemptyDefaultBsonTag bool                   `protobuf:"varint,17,opt,name=omitempty_default_bson_tag,json=omitemptyDefaultBsonTag,proto3" json:"omitempty_default_bson_tag,omitempty"` // 生成bson tag时候是否默认omitempty
+	OmitemptyDefaultJsonTag bool                   `protobuf:"varint,18,opt,name=omitempty_default_json_tag,json=omitemptyDefaultJsonTag,proto3" json:"omitempty_default_json_tag,omitempty"` // 生成json tag时候是否默认omitempty
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *MgormOptions) Reset() {
@@ -227,12 +229,26 @@ func (x *MgormOptions) GetIsPureStruct() bool {
 	return false
 }
 
+func (x *MgormOptions) GetOmitemptyDefaultBsonTag() bool {
+	if x != nil {
+		return x.OmitemptyDefaultBsonTag
+	}
+	return false
+}
+
+func (x *MgormOptions) GetOmitemptyDefaultJsonTag() bool {
+	if x != nil {
+		return x.OmitemptyDefaultJsonTag
+	}
+	return false
+}
+
 type MgormFieldOptions struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	BsonTag       string                 `protobuf:"bytes,1,opt,name=bson_tag,json=bsonTag,proto3" json:"bson_tag,omitempty"`                           // 自定义字段的tag bson
-	JsonTag       string                 `protobuf:"bytes,2,opt,name=json_tag,json=jsonTag,proto3" json:"json_tag,omitempty"`                           // 自定义字段的tag json
-	FieldType     FieldType              `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=ext.FieldType" json:"field_type,omitempty"` // 自定义字段的特殊类型
-	Tags          string                 `protobuf:"bytes,4,opt,name=tags,proto3" json:"tags,omitempty"`                                                // 自定义tags,如果设置该选项,则会直接采用tags作为最终tags,即时定义了bson_tag或json_tag,也会被tags覆盖
+	BsonTag       string                 `protobuf:"bytes,1,opt,name=bson_tag,json=bsonTag,proto3" json:"bson_tag,omitempty"`                                 // 自定义字段的tag bson
+	JsonTag       string                 `protobuf:"bytes,2,opt,name=json_tag,json=jsonTag,proto3" json:"json_tag,omitempty"`                                 // 自定义字段的tag json
+	FieldType     FieldType              `protobuf:"varint,3,opt,name=field_type,json=fieldType,proto3,enum=mgorm_ext.FieldType" json:"field_type,omitempty"` // 自定义字段的特殊类型
+	Tags          string                 `protobuf:"bytes,4,opt,name=tags,proto3" json:"tags,omitempty"`                                                      // 自定义tags,如果设置该选项,则会直接采用tags作为最终tags,即时定义了bson_tag或json_tag,也会被tags覆盖
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -300,7 +316,7 @@ var file_mgorm_ext_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.MessageOptions)(nil),
 		ExtensionType: (*MgormOptions)(nil),
 		Field:         76001,
-		Name:          "ext.mgorm_opts",
+		Name:          "mgorm_ext.mgorm_opts",
 		Tag:           "bytes,76001,opt,name=mgorm_opts",
 		Filename:      "mgorm_ext.proto",
 	},
@@ -308,7 +324,7 @@ var file_mgorm_ext_proto_extTypes = []protoimpl.ExtensionInfo{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*MgormFieldOptions)(nil),
 		Field:         76001,
-		Name:          "ext.mgorm_field_opts",
+		Name:          "mgorm_ext.mgorm_field_opts",
 		Tag:           "bytes,76001,opt,name=mgorm_field_opts",
 		Filename:      "mgorm_ext.proto",
 	},
@@ -316,13 +332,13 @@ var file_mgorm_ext_proto_extTypes = []protoimpl.ExtensionInfo{
 
 // Extension fields to descriptorpb.MessageOptions.
 var (
-	// optional ext.MgormOptions mgorm_opts = 76001;
+	// optional mgorm_ext.MgormOptions mgorm_opts = 76001;
 	E_MgormOpts = &file_mgorm_ext_proto_extTypes[0]
 )
 
 // Extension fields to descriptorpb.FieldOptions.
 var (
-	// optional ext.MgormFieldOptions mgorm_field_opts = 76001;
+	// optional mgorm_ext.MgormFieldOptions mgorm_field_opts = 76001;
 	E_MgormFieldOpts = &file_mgorm_ext_proto_extTypes[1]
 )
 
@@ -330,7 +346,7 @@ var File_mgorm_ext_proto protoreflect.FileDescriptor
 
 const file_mgorm_ext_proto_rawDesc = "" +
 	"\n" +
-	"\x0fmgorm_ext.proto\x12\x03ext\x1a google/protobuf/descriptor.proto\"\xdf\x04\n" +
+	"\x0fmgorm_ext.proto\x12\tmgorm_ext\x1a google/protobuf/descriptor.proto\"\xd9\x05\n" +
 	"\fMgormOptions\x12\x12\n" +
 	"\x04conn\x18\x01 \x01(\tR\x04conn\x12\x0e\n" +
 	"\x02db\x18\x02 \x01(\tR\x02db\x12\x0e\n" +
@@ -348,20 +364,22 @@ const file_mgorm_ext_proto_rawDesc = "" +
 	"\x0fexpire_ttl_days\x18\r \x01(\x03R\rexpireTtlDays\x123\n" +
 	"\x16orm_struct_name_suffix\x18\x0e \x01(\tR\x13ormStructNameSuffix\x121\n" +
 	"\x15orm_model_name_suffix\x18\x0f \x01(\tR\x12ormModelNameSuffix\x12$\n" +
-	"\x0eis_pure_struct\x18\x10 \x01(\bR\fisPureStruct\"\x8c\x01\n" +
+	"\x0eis_pure_struct\x18\x10 \x01(\bR\fisPureStruct\x12;\n" +
+	"\x1aomitempty_default_bson_tag\x18\x11 \x01(\bR\x17omitemptyDefaultBsonTag\x12;\n" +
+	"\x1aomitempty_default_json_tag\x18\x12 \x01(\bR\x17omitemptyDefaultJsonTag\"\x92\x01\n" +
 	"\x11MgormFieldOptions\x12\x19\n" +
 	"\bbson_tag\x18\x01 \x01(\tR\absonTag\x12\x19\n" +
-	"\bjson_tag\x18\x02 \x01(\tR\ajsonTag\x12-\n" +
+	"\bjson_tag\x18\x02 \x01(\tR\ajsonTag\x123\n" +
 	"\n" +
-	"field_type\x18\x03 \x01(\x0e2\x0e.ext.FieldTypeR\tfieldType\x12\x12\n" +
+	"field_type\x18\x03 \x01(\x0e2\x14.mgorm_ext.FieldTypeR\tfieldType\x12\x12\n" +
 	"\x04tags\x18\x04 \x01(\tR\x04tags*K\n" +
 	"\tFieldType\x12\x10\n" +
 	"\fFieldTypeNil\x10\x00\x12\x15\n" +
 	"\x11FieldTypeDatetime\x10\x01\x12\x15\n" +
-	"\x11FieldTypeObjectId\x10\x02:S\n" +
+	"\x11FieldTypeObjectId\x10\x02:Y\n" +
 	"\n" +
-	"mgorm_opts\x12\x1f.google.protobuf.MessageOptions\x18\xe1\xd1\x04 \x01(\v2\x11.ext.MgormOptionsR\tmgormOpts:a\n" +
-	"\x10mgorm_field_opts\x12\x1d.google.protobuf.FieldOptions\x18\xe1\xd1\x04 \x01(\v2\x16.ext.MgormFieldOptionsR\x0emgormFieldOptsB\x1fZ\x1dgithub.com/995933447/mgorm/pbb\x06proto3"
+	"mgorm_opts\x12\x1f.google.protobuf.MessageOptions\x18\xe1\xd1\x04 \x01(\v2\x17.mgorm_ext.MgormOptionsR\tmgormOpts:g\n" +
+	"\x10mgorm_field_opts\x12\x1d.google.protobuf.FieldOptions\x18\xe1\xd1\x04 \x01(\v2\x1c.mgorm_ext.MgormFieldOptionsR\x0emgormFieldOptsB\x1fZ\x1dgithub.com/995933447/mgorm/pbb\x06proto3"
 
 var (
 	file_mgorm_ext_proto_rawDescOnce sync.Once
@@ -378,18 +396,18 @@ func file_mgorm_ext_proto_rawDescGZIP() []byte {
 var file_mgorm_ext_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_mgorm_ext_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_mgorm_ext_proto_goTypes = []any{
-	(FieldType)(0),                      // 0: ext.FieldType
-	(*MgormOptions)(nil),                // 1: ext.MgormOptions
-	(*MgormFieldOptions)(nil),           // 2: ext.MgormFieldOptions
+	(FieldType)(0),                      // 0: mgorm_ext.FieldType
+	(*MgormOptions)(nil),                // 1: mgorm_ext.MgormOptions
+	(*MgormFieldOptions)(nil),           // 2: mgorm_ext.MgormFieldOptions
 	(*descriptorpb.MessageOptions)(nil), // 3: google.protobuf.MessageOptions
 	(*descriptorpb.FieldOptions)(nil),   // 4: google.protobuf.FieldOptions
 }
 var file_mgorm_ext_proto_depIdxs = []int32{
-	0, // 0: ext.MgormFieldOptions.field_type:type_name -> ext.FieldType
-	3, // 1: ext.mgorm_opts:extendee -> google.protobuf.MessageOptions
-	4, // 2: ext.mgorm_field_opts:extendee -> google.protobuf.FieldOptions
-	1, // 3: ext.mgorm_opts:type_name -> ext.MgormOptions
-	2, // 4: ext.mgorm_field_opts:type_name -> ext.MgormFieldOptions
+	0, // 0: mgorm_ext.MgormFieldOptions.field_type:type_name -> mgorm_ext.FieldType
+	3, // 1: mgorm_ext.mgorm_opts:extendee -> google.protobuf.MessageOptions
+	4, // 2: mgorm_ext.mgorm_field_opts:extendee -> google.protobuf.FieldOptions
+	1, // 3: mgorm_ext.mgorm_opts:type_name -> mgorm_ext.MgormOptions
+	2, // 4: mgorm_ext.mgorm_field_opts:type_name -> mgorm_ext.MgormFieldOptions
 	5, // [5:5] is the sub-list for method output_type
 	5, // [5:5] is the sub-list for method input_type
 	3, // [3:5] is the sub-list for extension type_name
