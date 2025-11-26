@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package mgorm_ext;
+option go_package = "github.com/995933447/mgorm/pb";
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.MessageOptions {
+  MgormOptions mgorm_opts = 76001;
+}
+
+extend google.protobuf.FieldOptions {
+  MgormFieldOptions mgorm_field_opts = 76001;
+}
+
+message MgormOptions {
+  string conn = 1; // 连接名称,支持自动水平扩展切分,如default_conn_%s_%d、scrm_%d
+  string db = 2; // 数据库名称,支持自动水平扩展切分,如biz_%s_%d、biz2_%d
+  string tb = 3; // 集合名称,支持自动水平扩展切分,如user_%s_%d、wallet_%d
+  bool cached = 4; // 是否启用缓存
+  repeated string index_keys = 5; // 普通索引
+  repeated string expire_index_keys = 6; // 过期索引
+  repeated string uniq_index_keys = 7; // 唯一索引
+  bool disabled_auto_created_at = 8; // 是否禁用自动创建created_at字段
+  bool disabled_auto_updated_at = 9; // 是否禁用自动创建updated_at字段
+  bool disabled_auto_expire_at = 10; // 是否禁用自动创建expire_at字段,启用后没有指定过期索引的情况下将把expire_at作为默认的过期索引
+  string primary_id_field_name = 12; // 指定主键_id字段名称,不设置则默认采用ID
+  int64 expire_ttl_days = 13; // 过期索引过期时间，仅作用于expire_at字段
+  string orm_struct_name_suffix = 14; // 指定生成的结构体名称尾缀，不设置则默认采用Orm
+  string orm_model_name_suffix = 15; // 指定生成的Model名称尾缀,不设置则默认Model
+  bool is_pure_struct = 16; // 是否只生成结构体,不生成Model,常用与集合里面内嵌的集合结构体
+  bool omitempty_default_bson_tag = 17; // 生成bson tag时候是否默认omitempty
+  bool omitempty_default_json_tag = 18; // 生成json tag时候是否默认omitempty
+}
+
+message MgormFieldOptions {
+  string bson_tag = 1; // 自定义字段的tag bson
+  string json_tag = 2; // 自定义字段的tag json
+  FieldType field_type = 3; // 自定义字段的特殊类型
+  string tags = 4; // 自定义tags,如果设置该选项,则会直接采用tags作为最终tags,即时定义了bson_tag或json_tag,也会被tags覆盖
+}
+
+enum FieldType { // 特殊字段类型
+  FieldTypeNil = 0;
+  FieldTypeDatetime = 1; // 时间类型
+  FieldTypeObjectId = 2; // object id类型
+}

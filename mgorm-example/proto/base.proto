@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package base;
+option go_package="github.com/995933447/mgorm/mgorm-example/base";
+import "mgorm/ext.proto";
+
+message Corp {
+  string corp_id = 1;
+}
+
+message App {
+  option (ext.mgorm_opts) = {
+    is_pure_struct: true
+  };
+  int32 app_id = 1;
+}

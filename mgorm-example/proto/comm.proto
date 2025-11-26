@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package common;
+option go_package="github.com/995933447/mgorm/mgorm-example/common";
+import "mgorm/ext.proto";
+import "base.proto";
+
+message Desc {
+  string lang = 1;
+}
+
+message Desc2 {
+  option (ext.mgorm_opts) = {
+    is_pure_struct: true
+  };
+  string lang = 1 [(ext.mgorm_field_opts) = {bson_tag:"language" json_tag:"language"}];
+}
+
+message Desc3 {
+  option (ext.mgorm_opts) = {
+    conn: "default_%d"
+    db:"example_db_%d",
+    tb:"desc3"
+  };
+  string lang = 1;
+  base.Corp corp = 2;
+  base.App app = 3;
+}
+

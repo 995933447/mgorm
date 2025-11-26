@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package user;
+option go_package="github.com/995933447/mgorm/mgorm-example/user";
+
+import "mgorm/ext.proto";
+import "comm.proto";
+
+message Address {
+  option (ext.mgorm_opts) = {
+    is_pure_struct: true
+  };
+  string street = 1 [(ext.mgorm_field_opts) = { bson_tag: "streets" json_tag:"road"}];
+  string city = 2 [(ext.mgorm_field_opts) = { bson_tag: "cities,omitempty" json_tag:"ct,omitempty"}];
+  string country = 3;
+}
+
+message User {
+  option (ext.mgorm_opts) = {
+    db: "test_example_%s"
+    tb:"user_%d_%d_%s"
+    cached: true
+    uniq_index_keys:["id", "email,username", "username,address.city:user_city"]
+    index_keys: ["sex:gender", "username,age", "register_at", "uuid"]
+    expire_ttl_days: 7
+  };
+
+  message Desc4 {
+    string lang5 = 1 [(ext.mgorm_field_opts) = {bson_tag:"language"}];
+  }
+
+  message Desc5 {
+    string desc = 1;
+  }
+
+  message Desc6 {
+  }
+
+  message Desc7 {
+    option (ext.mgorm_opts) = { // 无效的，只是测试代码
+      is_pure_struct: true // 无效的，只是测试代码
+    };
+  }
+
+  message Desc8 {
+    option (ext.mgorm_opts) = { // 无效的，只是测试代码
+      db: "incorrect_db" // 无效的，只是测试代码
+      tb: "incorrect_tb" // 无效的，只是测试代码
+    };
+  }
+
+  uint64 id = 1 [(ext.mgorm_field_opts) = { bson_tag:"id" json_tag:"id" tags:"schema:\"title=唯一标识\""}];
+  string username = 2;
+  string email = 3;
+  int32 age = 4;
+  float balance = 5;
+  bool active = 6;
+  double score = 7;
+  bytes avatar = 8;
+  map<string, string> tags = 9;
+  repeated string interests = 10;
+
+  // 嵌套对象
+  Address address = 11;
+
+  // 嵌套 repeated 对象
+  repeated Address history_addresses = 12;
+
+  uint32 sex = 13;
+
+  common.Desc desc = 14;
+  common.Desc2 desc2 = 15;
+  common.Desc3 desc3 = 16;
+
+  uint64 register_at = 17 [(ext.mgorm_field_opts) = {field_type: 1}];
+  uint64 login_at = 18 [(ext.mgorm_field_opts) = {field_type: 1}];
+  string uuid = 19 [(ext.mgorm_field_opts) = {field_type: 2}];
+
+  Desc4 desc4 = 20;
+  map<string, Desc4> desc4m = 21;
+  repeated Desc4 desc4s = 22;
+  repeated common.Desc descs = 23;
+  map<string, string> mm = 24;
+  map<string, common.Desc> descm = 25;
+  repeated common.Desc2 desc2s = 36;
+  repeated common.Desc3 desc3s = 37;
+  map<string, common.Desc2> desc2m = 38;
+  map<string, common.Desc3> desc3m = 39;
+  map<string, Desc5> desc5m = 40;
+  repeated Desc6 desc6s = 41;
+  map<string, Desc6> desc6m = 42;
+  map<string, Desc7> desc7m = 43;
+  map<string, Desc8> desc8m = 44;
+}
