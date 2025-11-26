@@ -49,11 +49,7 @@ func TestModel(t *testing.T) {
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {
 			return nil
 		},
-<<<<<<< HEAD
 	}, nil)
-=======
-	})
->>>>>>> 5a22478b1f4994520f4314c8f33c52079ad77bf5
 
 	mod := user.NewUserModel("def", 20001, 20101, "hash")
 	entity, err := mod.FindOneById(context.TODO(), 1213)
