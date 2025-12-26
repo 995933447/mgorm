@@ -90,6 +90,7 @@ type MgormOptions struct {
 	IsPureStruct            bool                   `protobuf:"varint,16,opt,name=is_pure_struct,json=isPureStruct,proto3" json:"is_pure_struct,omitempty"`                                    // 是否只生成结构体,不生成Model,常用与集合里面内嵌的集合结构体
 	OmitemptyDefaultBsonTag bool                   `protobuf:"varint,17,opt,name=omitempty_default_bson_tag,json=omitemptyDefaultBsonTag,proto3" json:"omitempty_default_bson_tag,omitempty"` // 生成bson tag时候是否默认omitempty
 	OmitemptyDefaultJsonTag bool                   `protobuf:"varint,18,opt,name=omitempty_default_json_tag,json=omitemptyDefaultJsonTag,proto3" json:"omitempty_default_json_tag,omitempty"` // 生成json tag时候是否默认omitempty
+	Desc                    string                 `protobuf:"bytes,19,opt,name=desc,proto3" json:"desc,omitempty"`
 	unknownFields           protoimpl.UnknownFields
 	sizeCache               protoimpl.SizeCache
 }
@@ -243,6 +244,13 @@ func (x *MgormOptions) GetOmitemptyDefaultJsonTag() bool {
 	return false
 }
 
+func (x *MgormOptions) GetDesc() string {
+	if x != nil {
+		return x.Desc
+	}
+	return ""
+}
+
 type MgormFieldOptions struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	BsonTag       string                 `protobuf:"bytes,1,opt,name=bson_tag,json=bsonTag,proto3" json:"bson_tag,omitempty"`                                 // 自定义字段的tag bson
@@ -346,7 +354,7 @@ var File_mgorm_ext_proto protoreflect.FileDescriptor
 
 const file_mgorm_ext_proto_rawDesc = "" +
 	"\n" +
-	"\x0fmgorm_ext.proto\x12\tmgorm_ext\x1a google/protobuf/descriptor.proto\"\xd9\x05\n" +
+	"\x0fmgorm_ext.proto\x12\tmgorm_ext\x1a google/protobuf/descriptor.proto\"\xed\x05\n" +
 	"\fMgormOptions\x12\x12\n" +
 	"\x04conn\x18\x01 \x01(\tR\x04conn\x12\x0e\n" +
 	"\x02db\x18\x02 \x01(\tR\x02db\x12\x0e\n" +
@@ -366,7 +374,8 @@ const file_mgorm_ext_proto_rawDesc = "" +
 	"\x15orm_model_name_suffix\x18\x0f \x01(\tR\x12ormModelNameSuffix\x12$\n" +
 	"\x0eis_pure_struct\x18\x10 \x01(\bR\fisPureStruct\x12;\n" +
 	"\x1aomitempty_default_bson_tag\x18\x11 \x01(\bR\x17omitemptyDefaultBsonTag\x12;\n" +
-	"\x1aomitempty_default_json_tag\x18\x12 \x01(\bR\x17omitemptyDefaultJsonTag\"\x92\x01\n" +
+	"\x1aomitempty_default_json_tag\x18\x12 \x01(\bR\x17omitemptyDefaultJsonTag\x12\x12\n" +
+	"\x04desc\x18\x13 \x01(\tR\x04desc\"\x92\x01\n" +
 	"\x11MgormFieldOptions\x12\x19\n" +
 	"\bbson_tag\x18\x01 \x01(\tR\absonTag\x12\x19\n" +
 	"\bjson_tag\x18\x02 \x01(\tR\ajsonTag\x123\n" +

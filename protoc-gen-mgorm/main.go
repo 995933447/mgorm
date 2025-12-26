@@ -53,6 +53,7 @@ type TemplateHeaderSlot struct {
 	Cached                bool
 	ShouldImportPrimitive bool
 	ShouldImportTime      bool
+	Desc                  string
 }
 
 type TemplateBodySlot struct {
@@ -311,6 +312,8 @@ func genCode(plugin *protogen.Plugin, f *protogen.File, messageMap map[string]*p
 		}
 
 		ext := proto.GetExtension(msg.Desc.Options(), pb.E_MgormOpts).(*pb.MgormOptions)
+
+		headerSlot.Desc = ext.Desc
 
 		var bodySlot TemplateBodySlot
 

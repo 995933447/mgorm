@@ -31,6 +31,7 @@ message MgormOptions {
   bool is_pure_struct = 16; // 是否只生成结构体,不生成Model,常用与集合里面内嵌的集合结构体
   bool omitempty_default_bson_tag = 17; // 生成bson tag时候是否默认omitempty
   bool omitempty_default_json_tag = 18; // 生成json tag时候是否默认omitempty
+  string desc = 19;
 }
 
 message MgormFieldOptions {
